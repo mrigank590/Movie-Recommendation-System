@@ -2,6 +2,8 @@ import streamlit as st
 import pickle
 import pandas as pd
 import requests
+import numpy as np
+import bz2
 
 def fetch_poster(movie_id):
     response = requests.get('https://api.themoviedb.org/3/movie/{}?api_key=ef9c2fe72ccf5204d9fc7e77cb1d055c'.format(movie_id))
@@ -26,7 +28,9 @@ movies = pd.DataFrame(movies_dict)
 
 st.title('Movie Recommendation System')
 
-similarity = pickle.load(open('similarity.pkl','rb'))
+ifile = bz2.BZ2File("similarity",'rb')
+similarity = pickle.load(ifile)
+ifile.close()
 selected_movie = st.selectbox('Select any movie from the following ', movies['title'].values
 )
 
